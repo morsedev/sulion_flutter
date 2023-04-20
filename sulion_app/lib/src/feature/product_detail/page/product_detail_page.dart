@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sulion/widgets/spacer.dart';
+import 'package:sulion_app/src/shared/widgets/widgets.dart';
 
-import '../network/product_model.dart';
+import '../../../core/shared/data/model/product_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key, required this.product});

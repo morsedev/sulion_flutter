@@ -2,23 +2,23 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:sulion/network/client.dart';
-import 'package:sulion/pages/product_detail_page.dart';
+import 'package:sulion_app/src/shared/infra/client.dart';
+import 'package:sulion_app/src/feature/product_detail/page/product_detail_page.dart';
 
-import '../network/product_model.dart';
+import '../../../core/shared/data/model/product_model.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ProductListPage extends StatefulWidget {
+  const ProductListPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ProductListPage> createState() => _ProductListPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ProductListPageState extends State<ProductListPage> {
   List<Product>? _productList;
 
   Future<void> _getProducts() async {
-    final productResponse = await Client().products();
+    final productResponse = await ClientImpl().products();
     final List<dynamic> productList = jsonDecode(productResponse.body);
     final products = List<Product>.from(productList.map((product) {
       final Product p = Product(
@@ -107,7 +107,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               );
-            } else {}
+            }
+            return null;
           }),
         ),
       ),

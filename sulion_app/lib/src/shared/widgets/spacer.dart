@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sulion/theme/theme.dart';
+import 'package:sulion_app/shared/theme/theme.dart';
 
 class VerticalSpacer extends StatelessWidget {
   const VerticalSpacer._({required this.type});
