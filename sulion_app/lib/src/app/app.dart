@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sulion_app/src/core/session/domain/repository/session_repository.dart';
+import 'package:sulion_app/src/core/session/domain/use_case/login_use_case.dart';
+import 'package:sulion_app/src/core/session/domain/use_case/login_use_case_impl.dart';
 import 'package:sulion_app/src/di/di_widget.dart';
 import 'package:sulion_app/src/di/login/login_di.dart';
 import 'package:sulion_app/src/feature/session/page/login_page.dart';
@@ -19,6 +21,7 @@ class App extends StatelessWidget {
     Client datasource = ClientImpl();
     SessionRepository loginRepository = SessionRepositoryImpl(datasource);
     Plug<LoginPage, LoginDependency> plug = LoginPlug();
+    LoginUseCase loginUseCase = LoginUseCaseImpl(loginRepository);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -27,7 +30,7 @@ class App extends StatelessWidget {
         '/': (context) => DiWidget<LoginPage, LoginDependency>(
               dependency: DefaultLoginDependency(
                   viewModel: LoginViewModel(
-                repository: loginRepository,
+                loginUseCase: loginUseCase,
                 navigator: Navigator.of(context),
               )),
               plug: plug,

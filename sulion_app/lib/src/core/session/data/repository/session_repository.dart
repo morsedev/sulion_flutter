@@ -1,3 +1,4 @@
+import 'package:http/http.dart' hide Client;
 import 'package:sulion_app/src/core/session/data/model/login_request_model.dart';
 import 'package:sulion_app/src/core/session/domain/entity/login_entity.dart';
 import 'package:sulion_app/src/core/session/domain/repository/session_repository.dart';
@@ -14,17 +15,23 @@ class SessionRepositoryImpl implements SessionRepository {
   final Client _datasource;
 
   @override
-  Future<ResultHolder<bool, ErrorModel>> login(LoginEntity entity) {
+  Future<ResultHolder<bool, ErrorModel>> login(LoginEntity entity) async {
     final request = LoginRequestModel.fromEntity(entity);
-    return _datasource
-        .login(request.toJson())
-        .then((value) => value.statusCode == 200
-            ? ResultHolder<bool, ErrorModel>.success(true)
-            : ResultHolder<bool, ErrorModel>.fail(
-                const ErrorModel(
-                  code: 'fallo',
-                  message: 'Algo ha fallado',
-                ),
-              ));
+
+    var respuesta = await _datasource.login(request.toJson());
+    if (respuesta.statusCode == 200) {
+      return ResultHolder<bool, ErrorModel>.success(true);
+    }
+    return ResultHolder<bool, ErrorModel>.fail(
+      const ErrorModel(
+        code: 'fallo',
+        message: 'Algo ha fallado',
+      ),
+    );
+  }
+
+  Future<String> getUser() {
+    // Se llama a la base de datos... No sabemos cuanto tarda
+    return Future(() => 'Juanito');
   }
 }

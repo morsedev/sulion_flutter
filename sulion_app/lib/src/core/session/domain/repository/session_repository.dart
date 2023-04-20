@@ -10,4 +10,5 @@ abstract class SessionRepository {
   );
   final Client _datasource;
   Future<ResultHolder<bool, ErrorModel>> login(LoginEntity loginData);
+  Future<String> getUser();
 }
