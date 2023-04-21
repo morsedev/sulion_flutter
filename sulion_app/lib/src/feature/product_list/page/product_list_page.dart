@@ -7,6 +7,18 @@ import 'package:sulion_app/src/feature/product_detail/page/product_detail_page.d
 
 import '../../../core/shared/data/model/product_model.dart';
 
+// TODO: implementar esta pantalla usando MVVM
+/*
+para hacer esto sera necesario crear las abstracciones necesarias, tanto de la capa de 
+data como de la de domain, es decir Repository y UseCase, tambien crearemos las implementaciones
+de esas abstracciones, para el repository nos fijamos si en el Client es necesario pasar algún parámetro
+para obtener el listado de productos.
+
+En la capa de presentación tendremos que cambiar nuestro widget para convertirlo en 
+StatelessWidget y crearemos el viewmodel correspondiente, siempre teniendo en cuenta que acciones
+y que datos necesita/ejecuta nuestra vista.
+*/
+
 class ProductListPage extends StatefulWidget {
   const ProductListPage({super.key});
 
