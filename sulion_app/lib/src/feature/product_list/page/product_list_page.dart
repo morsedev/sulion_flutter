@@ -39,6 +39,8 @@ class ProductListPage extends BasePage {
   Widget build(BuildContext context) {
     getProducts();
 
+    List<Product> productList = [];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
@@ -55,9 +57,8 @@ class ProductListPage extends BasePage {
         child: StreamBuilder<List<Product>>(
           stream: state,
           builder: (context, snapshot) {
-            List<Product> productList = [];
             if (snapshot.hasData) {
-              productList = snapshot.data!;
+              productList.addAll(snapshot.data!);
             }
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
