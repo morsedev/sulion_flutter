@@ -22,15 +22,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(
-                  image: NetworkImage(widget.product.image),
-                  fit: BoxFit.fill,
-                ),
-              ],
-            ),
+            Image(
+                image: NetworkImage(widget.product.image ??
+                    'http://192.168.50.221/8080/images/no_photo.png'),
+                fit: BoxFit.cover),
             VerticalSpacer.medium(),
             Text(widget.product.description),
           ],

@@ -4,8 +4,9 @@ import 'package:http/http.dart' as http;
 
 abstract class Client {
   Future<http.Response> login(Map<String, dynamic> body);
-  Future<http.Response> products();
+  Future<http.Response> products([String? id, int elementos = 10]);
   Future<http.Response> product(String id);
+  Future<http.Response> allProducts();
 }
 
 class ClientImpl implements Client {
@@ -23,7 +24,17 @@ class ClientImpl implements Client {
   }
 
   @override
-  Future<http.Response> products() {
+  Future<http.Response> products([String? id, int elementos = 10]) {
+    return http.get(
+      Uri.http(
+        '192.168.50.221:8080',
+        'products/$id/$elementos',
+      ),
+    );
+  }
+
+  @override
+  Future<http.Response> allProducts() {
     return http.get(
       Uri.http(
         '192.168.50.221:8080',

@@ -20,8 +20,7 @@ class LoginViewModel {
 
       switch (value.result) {
         case Result.succeed:
-          navigator.push(
-              MaterialPageRoute(builder: (context) => const ProductListPage()));
+          navigator.pushNamed('product_list');
           break;
         case Result.failed:
           // TODO: Manejar errores de servicio
