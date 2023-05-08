@@ -1,16 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sulion_app/src/shared/base/page/base_page.dart';
-import 'package:sulion_app/src/shared/infra/client.dart';
 import 'package:sulion_app/src/feature/product_detail/page/product_detail_page.dart';
 
 import '../../../core/shared/data/model/product_model.dart';
 
 class ProductListPage extends BasePage {
-  // List<Product>? _productList;
-
   const ProductListPage({
     super.key,
     required this.getProducts,
