@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 abstract class Client {
   Future<http.Response> login(Map<String, dynamic> body);
+  Future<http.Response> refreshToken(Map<String, dynamic> body);
   Future<http.Response> products([String? id, int elementos = 10]);
   Future<http.Response> product(String id);
   Future<http.Response> allProducts();
@@ -51,5 +52,11 @@ class ClientImpl implements Client {
         'products/$id',
       ),
     );
+  }
+
+  @override
+  Future<http.Response> refreshToken(Map<String, dynamic> body) {
+    // TODO: implement refreshToken
+    throw UnimplementedError();
   }
 }
