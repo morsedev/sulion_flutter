@@ -4,7 +4,7 @@ import 'package:sulion_app/src/core/shared/domain/use_case/base_use_case.dart';
 import 'package:sulion_app/src/shared/base/error/error_model.dart';
 import 'package:sulion_app/src/shared/base/result/result_holder.dart';
 
-abstract class LoginUseCase extends BaseUseCase<bool, LoginEntity> {
+abstract class LoginUseCase extends FutureUseCase<bool, LoginEntity> {
   LoginUseCase(this._repository);
   final SessionRepository _repository;
 

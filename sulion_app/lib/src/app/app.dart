@@ -11,6 +11,7 @@ import 'package:sulion_app/src/feature/session/view_model/login_view_model.dart'
 import 'package:sulion_app/src/core/session/data/repository/session_repository.dart';
 import 'package:sulion_app/src/plugs/login/login_plug.dart';
 import 'package:sulion_app/src/plugs/product_list/product_list_plug.dart';
+import 'package:sulion_app/src/shared/infra/local_datasource.dart';
 import 'package:sulion_app/src/shared/theme/theme.dart';
 import 'package:sulion_app/src/shared/infra/client.dart';
 import 'package:sulion_app/src/plugs/plug.dart';
@@ -26,8 +27,10 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Client datasource = ClientImpl();
-    SessionRepository loginRepository = SessionRepositoryImpl(datasource);
+    Client remoteDatasource = ClientImpl();
+    LocalDatasource localDatasource = LocalDatasourceImpl();
+    SessionRepository loginRepository =
+        SessionRepositoryImpl(remoteDatasource, localDatasource);
     Plug<LoginPage, LoginDependency> loginPlug = LoginPlug();
     LoginUseCase loginUseCase = LoginUseCaseImpl(loginRepository);
 

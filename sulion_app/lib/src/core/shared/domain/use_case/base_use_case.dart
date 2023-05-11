@@ -5,8 +5,14 @@ abstract class UseCase<Result, Parameter> {
   Result call(Parameter param);
 }
 
-abstract class BaseUseCase<Result, Param>
+abstract class FutureUseCase<Result, Param>
     implements UseCase<Future<ResultHolder<Result, ErrorModel>>, Param> {
   @override
   Future<ResultHolder<Result, ErrorModel>> call(Param param);
+}
+
+abstract class StreamUseCase<Result, Param>
+    implements UseCase<Stream<ResultHolder<Result, ErrorModel>>, Param> {
+  @override
+  Stream<ResultHolder<Result, ErrorModel>> call(Param param);
 }

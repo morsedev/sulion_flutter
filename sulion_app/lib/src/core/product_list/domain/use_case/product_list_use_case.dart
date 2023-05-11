@@ -4,7 +4,7 @@ import 'package:sulion_app/src/shared/base/error/error_model.dart';
 import 'package:sulion_app/src/shared/base/result/result_holder.dart';
 
 abstract class ProductListUseCase
-    extends BaseUseCase<List<ProductEntity>, String> {
+    extends FutureUseCase<List<ProductEntity>, String> {
   @override
   Future<ResultHolder<List<ProductEntity>, ErrorModel>> call(String? param);
 }
