@@ -35,7 +35,13 @@ Future<Response> _loginHandler(Request request) async {
     print(body);
     Map<String, dynamic> bodyDecoded = jsonDecode(body);
     if (bodyDecoded['username'] != null && bodyDecoded['password'] != null) {
-      final loginOk = {'token': "example_token"};
+      final minutesToExpire = Duration(minutes: 1);
+      final loginOk = {
+        'token': "token",
+        'refreshToken': 'refresh_token',
+        'expiration': DateTime.now().millisecondsSinceEpoch +
+            minutesToExpire.inMilliseconds /* expira dentro de 6 minutos */
+      };
       final encodedLoginOk = jsonEncode(loginOk);
       return Response.ok(encodedLoginOk);
     }
