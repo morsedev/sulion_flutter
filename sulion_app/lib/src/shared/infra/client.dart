@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:sulion_app/src/shared/infra/interceptor.dart';
+import 'package:sulion_app/src/shared/infra/interceptors/interceptor.dart';
 
 abstract class Client {
   Future<http.Response> login(Map<String, dynamic> body);
@@ -15,7 +15,7 @@ abstract class Client {
 class ClientImpl implements Client {
   final List<Interceptor> _interceptors = [];
   @override
-  Future<http.Response> login(Map<String, dynamic> body) {
+  Future<http.Response> login(Map<String, dynamic> body) async {
     final encodedBody = jsonEncode(body);
     var headers = {'content-type': 'application/json'};
     return http.post(
@@ -23,53 +23,53 @@ class ClientImpl implements Client {
         '192.168.50.221:8080',
         'login',
       ),
-      headers: _intercept(InterceptorRequest(headers: headers)).headers,
+      headers: (await _intercept(InterceptorRequest(headers: headers))).headers,
       body: encodedBody,
     );
   }
 
   @override
-  Future<http.Response> products([String? id, int elementos = 10]) {
+  Future<http.Response> products([String? id, int elementos = 10]) async {
     return http.get(
       Uri.http(
         '192.168.50.221:8080',
         'products/$id/$elementos',
       ),
-      headers: _intercept(InterceptorRequest(headers: {})).headers,
+      headers: (await _intercept(InterceptorRequest(headers: {}))).headers,
     );
   }
 
   @override
-  Future<http.Response> allProducts() {
+  Future<http.Response> allProducts() async {
     return http.get(
       Uri.http(
         '192.168.50.221:8080',
         'products',
       ),
-      headers: _intercept(InterceptorRequest(headers: {})).headers,
+      headers: (await _intercept(InterceptorRequest(headers: {}))).headers,
     );
   }
 
   @override
-  Future<http.Response> product(String id) {
+  Future<http.Response> product(String id) async {
     return http.get(
       Uri.http(
         '192.168.50.221:8080',
         'products/$id',
       ),
-      headers: _intercept(InterceptorRequest(headers: {})).headers,
+      headers: (await _intercept(InterceptorRequest(headers: {}))).headers,
     );
   }
 
   @override
-  Future<http.Response> refreshToken(Map<String, dynamic> body) {
+  Future<http.Response> refreshToken(Map<String, dynamic> body) async {
     final encodedBody = jsonEncode(body);
     return http.post(
       Uri.http(
         '192.168.50.221:8080',
         'refreshToken',
       ),
-      headers: _intercept(InterceptorRequest(headers: {})).headers,
+      headers: (await _intercept(InterceptorRequest(headers: {}))).headers,
       body: encodedBody,
     );
   }
@@ -79,13 +79,17 @@ class ClientImpl implements Client {
     _interceptors.add(interceptor);
   }
 
-  InterceptorResponse _intercept(InterceptorRequest request) {
+  Future<InterceptorResponse> _intercept(InterceptorRequest request) async {
     var headers = request.headers;
     InterceptorResponse? interceptorResponse;
-    _interceptors.forEach((interceptor) async {
+    for (var interceptor in _interceptors) {
       interceptorResponse =
           await interceptor(InterceptorRequest(headers: headers));
-    });
+    }
+    // _interceptors.forEach((interceptor) async {
+    //   interceptorResponse =
+    //       await interceptor(InterceptorRequest(headers: headers));
+    // });
 
     return interceptorResponse ?? InterceptorResponse(headers: request.headers);
   }

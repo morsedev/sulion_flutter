@@ -1,5 +1,8 @@
-import 'package:http/http.dart' hide Client;
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:sulion_app/src/core/session/data/model/login_request_model.dart';
+import 'package:sulion_app/src/core/session/data/model/session_info_model.dart';
 import 'package:sulion_app/src/core/session/domain/entity/login_entity.dart';
 import 'package:sulion_app/src/core/session/domain/entity/session_info_entity.dart';
 import 'package:sulion_app/src/core/session/domain/repository/session_repository.dart';
@@ -11,19 +14,26 @@ import 'package:sulion_app/src/shared/infra/local_datasource.dart';
 class SessionRepositoryImpl implements SessionRepository {
   const SessionRepositoryImpl(this._remoteDatasource, this._localDatasource);
 
-  @override
   final Client _remoteDatasource;
   final LocalDatasource _localDatasource;
 
   @override
-  Future<ResultHolder<bool, ErrorModel>> login(LoginEntity entity) async {
+  Future<ResultHolder<SessionInfoEntity, ErrorModel>> login(
+      LoginEntity entity) async {
     final request = LoginRequestModel.fromEntity(entity);
 
     var respuesta = await _remoteDatasource.login(request.toJson());
     if (respuesta.statusCode == 200) {
-      return ResultHolder<bool, ErrorModel>.success(true);
+      // var encoded = jsonDecode(respuesta.body) as Map<String, dynamic>;
+      var sessionInfo = SessionInfoModel.fromJson(null, respuesta.body);
+      var sessionEntity = SessionInfoEntity(
+        token: sessionInfo.token,
+        refreshToken: sessionInfo.refreshToken,
+        expiration: sessionInfo.expiration,
+      );
+      return ResultHolder.success(sessionEntity);
     }
-    return ResultHolder<bool, ErrorModel>.fail(
+    return ResultHolder.fail(
       const ErrorModel(
         code: 'fallo',
         message: 'Algo ha fallado',
@@ -31,16 +41,31 @@ class SessionRepositoryImpl implements SessionRepository {
     );
   }
 
-  Future<String> getUser() {
-    // Se llama a la base de datos... No sabemos cuanto tarda
-    return Future(() => 'Juanito');
-  }
-
   @override
   Future<ResultHolder<SessionInfoEntity, ErrorModel>> refreshToken(
-      String tokenInfo) {
-    // TODO: hacer llamada el endpoint de refreshToken
-    throw UnimplementedError();
+      SessionInfoEntity tokenInfo) async {
+    var response = await _remoteDatasource.refreshToken(
+      SessionInfoModel(
+              token: tokenInfo.token ?? '',
+              refreshToken: tokenInfo.refreshToken ?? '',
+              expiration: tokenInfo.expiration ?? 0)
+          .toJson(),
+    );
+    if (response.statusCode == 200) {
+      var sessionInfo = SessionInfoModel.fromJson(null, response.body);
+      var sessionEntity = SessionInfoEntity(
+        token: sessionInfo.token,
+        refreshToken: sessionInfo.refreshToken,
+        expiration: sessionInfo.expiration,
+      );
+      return ResultHolder.success(sessionEntity);
+    }
+    return ResultHolder.fail(
+      const ErrorModel(
+        code: 'fallo',
+        message: 'Algo ha fallado',
+      ),
+    );
   }
 
   @override
@@ -61,6 +86,7 @@ class SessionRepositoryImpl implements SessionRepository {
     final isSuccess = await _localDatasource.put<SessionInfoEntity>(
         _SessionRepositoryConstants.sessionKey, sessionInfo);
     if (isSuccess) {
+      log('Session saved ${jsonEncode(sessionInfo.toStorage())}');
       return ResultHolder.success(true);
     }
     return ResultHolder.fail(

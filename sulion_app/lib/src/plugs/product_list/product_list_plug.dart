@@ -3,6 +3,7 @@ import 'package:sulion_app/src/feature/product_list/page/product_list_page.dart'
 import 'package:sulion_app/src/plugs/plug.dart';
 
 class ProductListPlug implements Plug<ProductListPage, ProductListDependency> {
+  const ProductListPlug();
   @override
   ProductListPage call(ProductListDependency dependency) {
     return ProductListPage(

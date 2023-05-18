@@ -4,6 +4,7 @@ import 'package:sulion_app/src/feature/session/page/login_page.dart';
 import '../plug.dart';
 
 class LoginPlug implements Plug<LoginPage, LoginDependency> {
+  const LoginPlug();
   @override
   LoginPage call(LoginDependency dependency) {
     return LoginPage(

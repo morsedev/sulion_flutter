@@ -6,6 +6,7 @@ class SessionInfoEntity extends Storable {
   String? refreshToken;
   int? expiration;
 
+  @override
   Map<String, dynamic> toStorage() {
     return {
       _SessionInfoEntityConstant.tokenKey: token,
@@ -14,6 +15,7 @@ class SessionInfoEntity extends Storable {
     };
   }
 
+  @override
   Storable fromStorage(Map<String, dynamic> map) {
     return SessionInfoEntity(
       token: map[_SessionInfoEntityConstant.tokenKey],
@@ -25,6 +27,6 @@ class SessionInfoEntity extends Storable {
 
 class _SessionInfoEntityConstant {
   static const tokenKey = 'token';
-  static const refresTokenKey = 'refresTokenKey';
-  static const expirationKey = 'expirationKey';
+  static const refresTokenKey = 'refresToken';
+  static const expirationKey = 'expiration';
 }

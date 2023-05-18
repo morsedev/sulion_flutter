@@ -2,7 +2,7 @@ import 'package:sulion_app/src/core/product_list/data/repository/product_list_re
 import 'package:sulion_app/src/core/product_list/domain/use_case/product_list_use_case_impl.dart';
 import 'package:sulion_app/src/di/di.dart';
 import 'package:sulion_app/src/feature/product_list/view_model/product_list_view_model.dart';
-import 'package:sulion_app/src/shared/infra/client.dart';
+import 'package:sulion_app/src/shared/infra/remote_datasource_config.dart';
 
 abstract class ProductListDependency extends Dependency {
   ProductListDependency();
@@ -15,7 +15,7 @@ class DefaultProductListDependency implements ProductListDependency {
   final ProductListViewModel viewModel = ProductListViewModel(
     ProductListUseCaseImpl(
       ProductListRepositoryImpl(
-        ClientImpl(),
+        const RemoteDatasourceConfig().bootstrap(),
       ),
     ),
   );

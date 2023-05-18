@@ -14,9 +14,6 @@ class LoginRequestModel {
   Map<String, dynamic> toJson() =>
       <String, dynamic>{'username': username, 'password': password};
 
-  @override
   final String password;
-
-  @override
   final String username;
 }

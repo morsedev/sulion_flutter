@@ -10,19 +10,17 @@ abstract class LocalDatasource {
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
-  LocalDatasourceImpl() {
-    SharedPreferences.getInstance().then((prefs) => _preferences = prefs);
-  }
-  late SharedPreferences _preferences;
+  Future<SharedPreferences> get _preferences async =>
+      await SharedPreferences.getInstance();
 
   @override
   Future<bool> delete<T>(String key) async {
-    return _preferences.remove(key);
+    return (await _preferences).remove(key);
   }
 
   @override
   Future<T?> get<T extends Storable>(String key, Storable instance) async {
-    String? encodedString = _preferences.getString(key);
+    String? encodedString = (await _preferences).getString(key);
     if (encodedString == null) {
       return null;
     }
@@ -31,13 +29,13 @@ class LocalDatasourceImpl implements LocalDatasource {
   }
 
   @override
-  Future<bool> put<T extends Storable>(String key, T data) {
-    return _preferences.setString(key, jsonEncode(data.toStorage()));
+  Future<bool> put<T extends Storable>(String key, T data) async {
+    return (await _preferences).setString(key, jsonEncode(data.toStorage()));
   }
 
   @override
-  void reset() {
-    _preferences.clear();
+  Future<void> reset() async {
+    (await _preferences).clear();
   }
 }
 

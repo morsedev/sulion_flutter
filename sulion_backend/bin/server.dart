@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
+import 'package:uuid/uuid.dart';
 
 final staticHandler = createStaticHandler('images');
 
@@ -15,6 +17,7 @@ final _router = Router()
   ..get('/', _rootHandler)
   ..get('/login', _loginHandler)
   ..post('/login', _loginHandler)
+  ..post('/refreshToken', _refreshTokenHandler)
   ..get('/products', _productsHandler)
   ..get('/products/<id>', _productsHandler)
   ..get('/products/<id>/<elements>', _productsHandler)
@@ -35,10 +38,35 @@ Future<Response> _loginHandler(Request request) async {
     print(body);
     Map<String, dynamic> bodyDecoded = jsonDecode(body);
     if (bodyDecoded['username'] != null && bodyDecoded['password'] != null) {
-      final minutesToExpire = Duration(minutes: 1);
+      final minutesToExpire = Duration(minutes: _Constants.expirationMinutes);
+      final uniqueId = Uuid().v1();
       final loginOk = {
-        'token': "token",
-        'refreshToken': 'refresh_token',
+        'token': 'token_$uniqueId',
+        'refreshToken': 'refresh_token_$uniqueId',
+        'expiration': DateTime.now().millisecondsSinceEpoch +
+            minutesToExpire.inMilliseconds /* expira dentro de 6 minutos */
+      };
+      final encodedLoginOk = jsonEncode(loginOk);
+      return Response.ok(encodedLoginOk);
+    }
+    return Response.badRequest();
+  } catch (e) {
+    return Response.badRequest();
+  }
+}
+
+Future<Response> _refreshTokenHandler(Request request) async {
+  try {
+    final body = await request.readAsString();
+    print(body);
+    print(request.headers.toString());
+    Map<String, dynamic> bodyDecoded = jsonDecode(body);
+    if (bodyDecoded['refreshToken'] != null) {
+      final minutesToExpire = Duration(minutes: _Constants.expirationMinutes);
+      final uniqueId = Uuid().v1();
+      final loginOk = {
+        'token': "token_$uniqueId",
+        'refreshToken': 'refresh_token_$uniqueId',
         'expiration': DateTime.now().millisecondsSinceEpoch +
             minutesToExpire.inMilliseconds /* expira dentro de 6 minutos */
       };
@@ -56,7 +84,8 @@ Future<Response> _productsHandler(Request request) async {
       await File('${Directory.current.path}/bin/json/products/products.json')
           .readAsString();
   final List<dynamic> products = jsonDecode(jsonFile);
-  // final body = await request.readAsString();
+  log(request.headers.toString());
+  print(request.headers);
   final productId = request.params['id'];
   final elements = request.params['elements'];
   if (productId != null && elements != null) {
@@ -88,6 +117,10 @@ Future<Response> _productsHandler(Request request) async {
   }
   print('return products');
   return Response.ok(jsonEncode(products));
+}
+
+class _Constants {
+  static const expirationMinutes = 1;
 }
 
 void main(List<String> args) async {

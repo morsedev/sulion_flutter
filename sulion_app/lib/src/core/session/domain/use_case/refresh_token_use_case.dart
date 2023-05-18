@@ -7,8 +7,7 @@ import 'package:sulion_app/src/shared/base/result/result_holder.dart';
 
 abstract class RefreshTokenUseCase
     extends StreamUseCase<SessionInfoEntity, None> {
-  RefreshTokenUseCase(this._sessionRepository);
-  final SessionRepository _sessionRepository;
+  const RefreshTokenUseCase(SessionRepository sessionRepository);
   @override
   Stream<ResultHolder<SessionInfoEntity, ErrorModel>> call([None param]);
 }

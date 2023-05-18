@@ -9,7 +9,6 @@ import 'package:sulion_app/src/shared/infra/client.dart';
 class ProductListRepositoryImpl implements ProductListRepository {
   const ProductListRepositoryImpl(this._datasource);
 
-  @override
   final Client _datasource;
 
   @override

@@ -2,7 +2,7 @@ import 'package:sulion_app/src/core/session/domain/entity/session_info_entity.da
 import 'package:sulion_app/src/core/session/domain/repository/session_repository.dart';
 import 'package:sulion_app/src/shared/base/error/error_model.dart';
 import 'package:sulion_app/src/shared/base/result/result_holder.dart';
-import 'package:sulion_app/src/shared/infra/interceptor.dart';
+import 'package:sulion_app/src/shared/infra/interceptors/interceptor.dart';
 
 abstract class TokenInterceptor
     implements Interceptor<Future<InterceptorResponse>> {

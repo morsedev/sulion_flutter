@@ -46,8 +46,8 @@ class ProductListPage extends BasePage {
         title: const Text('Products'),
       ),
       floatingActionButton: ElevatedButton(
-        child: const Text('Siguiente página'),
         onPressed: getProducts,
+        child: const Text('Siguiente página'),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -69,61 +69,57 @@ class ProductListPage extends BasePage {
               itemCount: productList.length,
               itemBuilder: ((context, index) {
                 final product = productList[index];
-                if (product != null) {
-                  return GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProductDetailPage(product: product),
-                      ),
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(product: product),
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: product.image != null
-                            ? DecorationImage(
-                                image: NetworkImage(product.image ??
-                                    'http://192.168.50.221/8080/images/no_photo.png'),
-                                fit: BoxFit.cover)
-                            : null,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 60,
-                            child: ColoredBox(
-                              color: Colors.black12,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      product.name,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: product.image != null
+                          ? DecorationImage(
+                              image: NetworkImage(product.image ??
+                                  'http://192.168.50.221/8080/images/no_photo.png'),
+                              fit: BoxFit.cover)
+                          : null,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          child: ColoredBox(
+                            color: Colors.black12,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    product.name,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      product.description,
-                                      maxLines: 2,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                  ),
+                                  Text(
+                                    product.description,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                }
-                return null;
+                  ),
+                );
               }),
             );
           },

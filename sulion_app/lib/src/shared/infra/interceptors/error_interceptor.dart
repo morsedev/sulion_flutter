@@ -1,5 +1,5 @@
 import 'package:http/http.dart';
-import 'package:sulion_app/src/shared/infra/interceptor.dart';
+import 'package:sulion_app/src/shared/infra/interceptors/interceptor.dart';
 
 abstract class ErrorInterceptor implements Interceptor<Future<Response>> {
   @override
